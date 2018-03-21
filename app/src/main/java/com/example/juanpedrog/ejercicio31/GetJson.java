@@ -17,7 +17,7 @@ import java.net.URL;
 
 public class GetJson extends AsyncTask<Void,Void,Void> {
     String data="";
-    String dataParsed="";
+    String pais="",ciudad="",descripcion="",temperatura="",presion="",humedad="",temp_min="",temp_max="";
     String singleParced="";
 
     @Override
@@ -33,13 +33,22 @@ public class GetJson extends AsyncTask<Void,Void,Void> {
                 data+=line;
             }
             JSONObject JO=new JSONObject(data);
-            dataParsed="País: "+JO.getJSONObject("sys").get("country")+"\nCiudad: "+JO.getJSONObject("sys").get("name");
+            ciudad=""+JO.get("name");
+            pais=""+JO.getJSONObject("sys").get("country");
+            System.out.println(JO.getJSONArray("weather").length()+"");
+            descripcion=""+((JSONObject)JO.getJSONArray("weather").get(0)).get("description");
+            temperatura=""+JO.getJSONObject("main").get("temp");
+            presion=""+JO.getJSONObject("main").get("pressure");
+            humedad=""+JO.getJSONObject("main").get("humidity");
+            temp_min=""+JO.getJSONObject("main").get("temp_min");
+            temp_max=""+JO.getJSONObject("main").get("temp_max");
 
         }catch (MalformedURLException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         } catch (JSONException e) {
+            System.out.println(e.getMessage());
             e.printStackTrace();
         }
         return null;
@@ -47,6 +56,13 @@ public class GetJson extends AsyncTask<Void,Void,Void> {
     @Override
     protected void onPostExecute(Void aVoid) {
         super.onPostExecute(aVoid);
-        MainActivity.data.setText(this.dataParsed);
+        MainActivity.ciudad.setText(ciudad);
+        MainActivity.pais.setText(pais);
+        MainActivity.descripcion.setText(descripcion);
+        MainActivity.presion.setText(presion);
+        MainActivity.humedad.setText(humedad);
+        MainActivity.temp_min.setText(temp_min);
+        MainActivity.temp_max.setText(temp_max);
+        MainActivity.temperatura.setText(temperatura);
     }
 }
